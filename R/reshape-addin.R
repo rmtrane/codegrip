@@ -52,12 +52,14 @@ addin_reshape_unsafe <- function() {
 
   if (ext == "qmd" | ext == "rmd") {
     qmd_or_rmd <- TRUE
+  } else {
+    qmd_or_rmd <- FALSE
   }
 
   # If extension is empty, see if contents start with '---' and contains at
   # least one start of code cell (i.e. "```{r") and one end of code cell
   # (i.e. "```").
-  if (!qmd_or_rmd) {
+  if (ext == "") {
     qmd_or_rmd <- context$contents[1] == "---" & any(grepl(pattern = "^```\\{r", x = context$contents)) & any(context$contents == "```")
   }
 
@@ -111,5 +113,7 @@ addin_reshape_unsafe <- function() {
   range <- rstudioapi::document_range(pos1, pos2)
 
   rstudioapi::modifyRange(range, out$reshaped)
-  rstudioapi::setCursorPosition(sel)
+  rstudioapi::setCursorPosition(
+    rstudioapi::document_position(out$start[["line"]], out$start[["col"]])
+  )
 }
