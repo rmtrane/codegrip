@@ -113,7 +113,7 @@ addin_reshape_unsafe <- function() {
   range <- rstudioapi::document_range(pos1, pos2)
 
   rstudioapi::modifyRange(range, out$reshaped)
-  rstudioapi::setCursorPosition(
-    rstudioapi::document_position(out$start[["line"]], out$start[["col"]])
-  )
+
+  ## Set cursor position to start of newly formatted code rather than the initially selected position.
+  rstudioapi::setCursorPosition(rstudioapi::document_position(out$start[["line"]], out$start[["col"]]))
 }
